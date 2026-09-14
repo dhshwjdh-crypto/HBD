@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TikTok Surprise</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #fff;
+    }
+    .tiktok-container {
+      width: 100%;
+      height: 100vh;
+      overflow-y: scroll;
+      snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+    .tiktok-container::-webkit-scrollbar {
+      display: none;
+    }
+    .slide {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      snap-align: start;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Градиент снизу для читаемости текста */
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+      pointer-events: none;
+    }
+    /* Блок информации снизу */
+    .info-panel {
+      position: absolute;
+      bottom: 25px;
+      left: 15px;
+      right: 70px;
+      z-index: 10;
+    }
+    .author {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+    .description-container {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #f1f1f1;
+    }
+    .description-preview {
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* Показывает только 2 строки */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .more-btn {
+      display: inline-block;
+      margin-left: 5px;
+      color: #bbb;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    /* Правая панель с кнопкой троеточия и лайком */
+    .side-bar {
+      position: absolute;
+      right: 12px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .action-btn svg {
+      width: 32px;
+      height: 32px;
+      fill: #fff;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    /* Всплывающее окно с полным описанием */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .modal-content {
+      background: #1e1e1e;
+      width: 100%;
+      max-height: 60vh;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+    .close-btn {
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+    .modal-body {
+      font-size: 15px;
+      line-height: 1.5;
+      white-space: pre-line;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+<div class="tiktok-container">
